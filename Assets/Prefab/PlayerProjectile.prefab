@@ -131,6 +131,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifetime: 3
   speed: 10
+  maxBounces: 3
+  isEnemyProjectile: 0
 --- !u!58 &2814015415160815478
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -141,7 +143,7 @@ CircleCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 6aeddf834fc61c745956effc153f83d6, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

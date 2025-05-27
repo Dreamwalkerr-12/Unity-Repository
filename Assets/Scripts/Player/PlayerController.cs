@@ -148,8 +148,9 @@ public class PlayerController : MonoBehaviour
 
     private void GameOver()
     {
-        Debug.Log("Game Over goes here");
+        GameManager.Instance?.GameOver();
     }
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -160,8 +161,14 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         groundCheck = new GroundCheck(LayerMask.GetMask("Ground"), GetComponent<Collider2D>(), rb, ref groundCheckRadius);
 
+        lives = 3;
+        score = 0;
+        isDead = false;
+
         UpdateLivesUI();
+        UpdateScoreUI();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -206,13 +213,8 @@ public class PlayerController : MonoBehaviour
 
     void SpriteFlip(float hInput) 
     {
-        //if no input - we flip based on if input is less than zero - there is no real performance cost to setting sr.flipX every frame, however doing it in the following two ways means that sr.flipX is set every frame there is an input
         if (hInput != 0) sr.flipX = (hInput < 0);
-        //if (hInput > 0) sr.flipX = false;
-        //else if (hInput < 0) sr.flipX = true;
         
-        //this is good as the sr.flipX is only changed when it needs too
-        //if ((hInput > 0 && sr.flipX) || (hInput < 0 && !sr.flipX)) sr.flipX = !sr.flipX;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

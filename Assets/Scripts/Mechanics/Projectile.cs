@@ -3,30 +3,27 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
-    [SerializeField, Range(1, 20)] private float lifetime = 1.0f;
+    [SerializeField, Range(1, 20)] private float lifetime = 5.0f;
     [SerializeField] private float speed = 10f;
+    [SerializeField] private int maxBounces = 3;
 
     public bool isEnemyProjectile = false;
 
     private Rigidbody2D rb;
+    private int currentBounces = 0;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
 
-        // If velocity not set manually, default to right
         if (rb.linearVelocity == Vector2.zero)
         {
             rb.linearVelocity = transform.right * speed;
         }
 
-        Destroy(gameObject, lifetime);
+        Destroy(gameObject, lifetime); // Destroy if it lives too long
     }
 
-    /// <summary>
-    /// Launches the projectile in a specified direction.
-    /// </summary>
-    /// <param name="direction">Normalized 2D direction vector</param>
     public void Launch(Vector2 direction)
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
@@ -35,27 +32,28 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Wall"))
-        {
-            Destroy(gameObject);
-        }
-        else if (isEnemyProjectile && collision.gameObject.CompareTag("Player"))
+        if (isEnemyProjectile && collision.gameObject.CompareTag("Player"))
         {
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player != null)
             {
-                player.Die(); // Or call player.TakeDamage()
+                player.Die();
             }
             Destroy(gameObject);
         }
         else if (!isEnemyProjectile && collision.gameObject.CompareTag("Enemy"))
         {
-            Destroy(collision.gameObject); // Or call enemy.Die()
+            Destroy(collision.gameObject);
             Destroy(gameObject);
         }
         else if (!collision.collider.isTrigger)
         {
-            Destroy(gameObject);
+            currentBounces++;
+
+            if (currentBounces >= maxBounces)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
