@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
             speedChange = null;
             speed /= 2.0f;
         }
-        
+
         speedChange = StartCoroutine(SpeedChangeCoroutine());
     }
 
@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
 
     public TextMeshProUGUI scoreText; // Assign in Inspector
     public TextMeshProUGUI livesText; // Assign in Inspector
-                                      
+
 
     private int score = 0;
 
@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
             }
         }
-        
+
 
         if (Input.GetButtonDown("Jump") && groundCheck.IsGrounded)
         {
@@ -211,10 +211,10 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isGrounded", groundCheck.IsGrounded);
     }
 
-    void SpriteFlip(float hInput) 
+    void SpriteFlip(float hInput)
     {
         if (hInput != 0) sr.flipX = (hInput < 0);
-        
+
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -263,19 +263,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-
-
-    public void OnCollisionExit2D(Collision2D collision)
-    {
-        
-    }
-
-    public void OnCollisionStay2D(Collision2D collision)
-    {
-        
-    }
-
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Pickup"))
@@ -287,15 +274,5 @@ public class PlayerController : MonoBehaviour
             Die();
             Destroy(collision.gameObject);
         }
-    }
-
-    public void OnTriggerExit2D(Collider2D collision)
-    {
-        
-    }
-
-    public void OnTriggerStay2D(Collider2D collision)
-    {
-        
     }
 }
