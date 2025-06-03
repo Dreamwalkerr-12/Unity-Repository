@@ -4,6 +4,7 @@ using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.InputSystem.XR.Haptics;
 
 
 
@@ -174,6 +175,17 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (isDead) return; // Disable all controls if dead
+
+        if (GameManager.Instance != null && GameManager.Instance.IsPaused)
+        {
+            rb.linearVelocity = Vector2.zero;
+            anim.speed = 0f; // Pause animation
+            return;
+        }
+        else
+        {
+            anim.speed = 1f; // Resume animation if unpaused
+        }
 
         AnimatorClipInfo[] curPlayingClips = anim.GetCurrentAnimatorClipInfo(0);
         //Update our ground check
