@@ -13,11 +13,17 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public GameState CurrentState { get; private set; }
 
+    [Header("UI References")]
+    [SerializeField] private PauseMenuController pauseMenuController;
+
     private bool isPaused = false;
+    //private PauseMenuController pauseMenuController;//
 
     private void Start()
     {
-        // Auto-set to Playing if current scene is Game scene
+        pauseMenuController = Object.FindFirstObjectByType<PauseMenuController>();
+
+        // Auto-set to Playing if current scene is Game scene  
         if (SceneManager.GetActiveScene().name == "Game" && CurrentState != GameState.Playing)
         {
             Debug.Log("Auto setting state to Playing");
@@ -93,6 +99,18 @@ public class GameManager : MonoBehaviour
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0f : 1f;
         Debug.Log(isPaused ? "Game Paused" : "Game Resumed");
+
+        if (pauseMenuController != null)
+        {
+            if (isPaused)
+                pauseMenuController.ShowPauseMenu();
+            else
+                pauseMenuController.HidePauseMenu();
+        }
+        else
+        {
+            Debug.LogWarning("PauseMenuController not found. Cannot toggle pause menu visibility.");
+        }
     }
 
 
