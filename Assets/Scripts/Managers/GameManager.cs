@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using System.Collections;
 
 public enum GameState
 {
@@ -15,6 +17,14 @@ public class GameManager : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private PauseMenuController pauseMenuController;
+
+    [Header("Settings Menu")]
+    [SerializeField] private GameObject settingsPanel;
+
+    [Header("Audio")]
+    [SerializeField] private AudioMixer masterMixer;
+    [SerializeField] private float fadeDuration = 1.5f;
+
 
     private bool isPaused = false;
     //private PauseMenuController pauseMenuController;//
@@ -69,9 +79,31 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         CurrentState = GameState.Playing;
-        Time.timeScale = 1f; // Ensure time resumes
+        Time.timeScale = 1f;
+        StartCoroutine(FadeOutMusicAndStart());
+    }
+
+    private IEnumerator FadeOutMusicAndStart()
+    {
+        float currentTime = 0f;
+
+        // Get starting volume in dB
+        masterMixer.GetFloat("MusicVolume", out float currentDb);
+        float startVolume = Mathf.Pow(10f, currentDb / 20f); // convert dB to linear
+
+        while (currentTime < fadeDuration)
+        {
+            currentTime += Time.unscaledDeltaTime;
+            float newVolume = Mathf.Lerp(startVolume, 0f, currentTime / fadeDuration);
+            float volumeInDb = Mathf.Log10(Mathf.Max(newVolume, 0.0001f)) * 20f;
+            masterMixer.SetFloat("MusicVolume", volumeInDb);
+            yield return null;
+        }
+
+        masterMixer.SetFloat("MusicVolume", -80f); // fully muted
         SceneManager.LoadScene("Game");
     }
+
 
     public void GameOver()
     {
@@ -86,6 +118,13 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("Title");
     }
+
+    public void LoadSettings()
+    {
+        Debug.Log("Loading Settings scene...");
+        SceneManager.LoadScene("Settings");
+    }
+
 
     public void ResetGame()
     {
@@ -123,4 +162,11 @@ public class GameManager : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
+
+    public void CloseSettings()
+    {
+        if (settingsPanel != null)
+            settingsPanel.SetActive(false);
+    }
+
 }

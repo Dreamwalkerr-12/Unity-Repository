@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1907804301351457850}
   - component: {fileID: 194233745818971989}
   - component: {fileID: 6615015677755075377}
+  - component: {fileID: 8061126582788356138}
   m_Layer: 6
   m_Name: Speed Up
   m_TagString: Pickup
@@ -177,3 +178,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifetime: 0
   moveSpeed: 3
+--- !u!114 &8061126582788356138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4648832509128428861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f42b646b5076beb4b8c9ecf13ce17757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxClip: {fileID: 8300000, guid: d7ce066ed5ec02d4ab74ca5a0ee644a3, type: 3}
+  destroyOnPlay: 1
+  triggerTag: Player

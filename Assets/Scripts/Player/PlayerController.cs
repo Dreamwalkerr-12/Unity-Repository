@@ -27,6 +27,12 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
     private Coroutine speedChange = null;
 
+    [Header("Audio Clips")]
+    [SerializeField] private AudioClip jumpSFX;
+    [SerializeField] private AudioClip coinSFX;
+    [SerializeField] private AudioClip deathSFX;
+
+
     public void SpeedChange()
     {
         if (speedChange != null)
@@ -105,6 +111,11 @@ public class PlayerController : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
+
+        // Play death sound
+        if (deathSFX != null)
+            AudioManager.Instance.PlaySFX(deathSFX);
+
         Lives -= 1;
 
         if (Lives <= 0)
@@ -118,7 +129,6 @@ public class PlayerController : MonoBehaviour
             Respawn();
         }
     }
-
 
 
     private void Respawn()
@@ -213,7 +223,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && groundCheck.IsGrounded)
         {
             rb.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+
+            // Play jump sound
+            if (jumpSFX != null)
+                AudioManager.Instance.PlaySFX(jumpSFX);
         }
+
 
         //apply changes to look
         SpriteFlip(hInput);
@@ -279,8 +294,12 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("Pickup"))
         {
+            if (coinSFX != null)
+                AudioManager.Instance.PlaySFX(coinSFX);
+
             Destroy(collision.gameObject);
         }
+
         else if (collision.CompareTag("EnemyProjectile"))
         {
             Die();

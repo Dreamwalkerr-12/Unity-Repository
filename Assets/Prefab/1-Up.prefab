@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4980043934019272230}
   - component: {fileID: 3679177615108694898}
   - component: {fileID: 2197509335387499903}
+  - component: {fileID: 1222487655627853278}
   m_Layer: 6
   m_Name: 1-Up
   m_TagString: Pickup
@@ -177,3 +178,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifetime: 0
   moveSpeed: 3
+--- !u!114 &1222487655627853278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5977278637693486220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f42b646b5076beb4b8c9ecf13ce17757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxClip: {fileID: 8300000, guid: d7ce066ed5ec02d4ab74ca5a0ee644a3, type: 3}
+  destroyOnPlay: 1
+  triggerTag: Player

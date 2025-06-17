@@ -44,3 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dcd8c12d27933347a53c248c38ee539, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenuController: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  masterMixer: {fileID: 24100000, guid: b24b239c61b995647a488c027f6097fd, type: 2}
+  fadeDuration: 1.5
