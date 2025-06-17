@@ -18,29 +18,11 @@ public class GameManager : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private PauseMenuController pauseMenuController;
 
-    [Header("Settings Menu")]
-    [SerializeField] private GameObject settingsPanel;
-
     [Header("Audio")]
     [SerializeField] private AudioMixer masterMixer;
     [SerializeField] private float fadeDuration = 1.5f;
 
-
     private bool isPaused = false;
-    //private PauseMenuController pauseMenuController;//
-
-    private void Start()
-    {
-        pauseMenuController = Object.FindFirstObjectByType<PauseMenuController>();
-
-        // Auto-set to Playing if current scene is Game scene  
-        if (SceneManager.GetActiveScene().name == "Game" && CurrentState != GameState.Playing)
-        {
-            Debug.Log("Auto setting state to Playing");
-            CurrentState = GameState.Playing;
-        }
-    }
-
 
     private void Awake()
     {
@@ -54,22 +36,30 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        if (pauseMenuController == null)
+            pauseMenuController = Object.FindFirstObjectByType<PauseMenuController>();
+
+        if (SceneManager.GetActiveScene().name == "Game" && CurrentState != GameState.Playing)
+        {
+            Debug.Log("Auto setting state to Playing");
+            CurrentState = GameState.Playing;
+        }
+    }
+
     private void Update()
     {
-        Debug.Log("GameManager Update | State: " + CurrentState);
-
         if (CurrentState == GameState.Playing)
         {
             if (Input.GetKeyDown(KeyCode.P))
             {
-                Debug.Log("P key pressed");
                 TogglePause();
             }
         }
 
         if (CurrentState == GameState.GameOver && Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("Escape pressed in GameOver state");
             LoadTitle();
         }
     }
@@ -86,10 +76,8 @@ public class GameManager : MonoBehaviour
     private IEnumerator FadeOutMusicAndStart()
     {
         float currentTime = 0f;
-
-        // Get starting volume in dB
         masterMixer.GetFloat("MusicVolume", out float currentDb);
-        float startVolume = Mathf.Pow(10f, currentDb / 20f); // convert dB to linear
+        float startVolume = Mathf.Pow(10f, currentDb / 20f);
 
         while (currentTime < fadeDuration)
         {
@@ -100,10 +88,9 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        masterMixer.SetFloat("MusicVolume", -80f); // fully muted
+        masterMixer.SetFloat("MusicVolume", -80f);
         SceneManager.LoadScene("Game");
     }
-
 
     public void GameOver()
     {
@@ -121,10 +108,8 @@ public class GameManager : MonoBehaviour
 
     public void LoadSettings()
     {
-        Debug.Log("Loading Settings scene...");
         SceneManager.LoadScene("Settings");
     }
-
 
     public void ResetGame()
     {
@@ -137,7 +122,6 @@ public class GameManager : MonoBehaviour
     {
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0f : 1f;
-        Debug.Log(isPaused ? "Game Paused" : "Game Resumed");
 
         if (pauseMenuController != null)
         {
@@ -148,14 +132,12 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("PauseMenuController not found. Cannot toggle pause menu visibility.");
+            Debug.LogWarning("PauseMenuController is missing.");
         }
     }
 
-
     public void QuitGame()
     {
-        Debug.Log("Quitting game...");
         Application.Quit();
 
 #if UNITY_EDITOR
@@ -165,8 +147,7 @@ public class GameManager : MonoBehaviour
 
     public void CloseSettings()
     {
-        if (settingsPanel != null)
-            settingsPanel.SetActive(false);
+        CurrentState = GameState.Title;
+        SceneManager.LoadScene("Title");
     }
-
 }

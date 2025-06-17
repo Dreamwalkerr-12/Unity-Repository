@@ -45,6 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuController: {fileID: 0}
-  settingsPanel: {fileID: 0}
   masterMixer: {fileID: 24100000, guid: b24b239c61b995647a488c027f6097fd, type: 2}
   fadeDuration: 1.5
